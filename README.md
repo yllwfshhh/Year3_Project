@@ -1,2 +1,3 @@
 # Year3_Project
-website to calculate CRT
+
+Environment : tutorial-env\Scripts\activate.bat
