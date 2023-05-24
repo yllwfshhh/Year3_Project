@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.756);
+    /* width : 100% ; */
+    overflow-x: hidden;
+  }
+  .index-button {
+    margin: 50px;
+    color:white;
+    background-color: #ffc800;;
+    border-radius:6px;
+    border:1px solid #ffaa22;
+    display:inline-block;
+    cursor:pointer;
+    font-family:Georgia;
+    font-size:19px;
+    font-weight:bold;
+    padding:15px 20px;
+    text-decoration:none;
+    }
+    .index-button:hover {
+        background-color:#bf9600;
+    }
+
+  .intro-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding : 50px
+  }
+  .intro-left{
+    flex-basis: 60%;
+    text-align: top;
+  }
+  .intro-right{
+    flex-basis: 40%;
+    text-align: center;
+    
+  }
+  .intro {
+    margin: 0;
+    padding: 0;
+    color : white;
+    height: 900px;
+  }
+  .title{
+    background-image: url("https://medlineplus.gov/images/Xray_share.jpg");
+    background-position: center;
+    background-size: 100%;
+
+  }
+  .title-container{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    color : rgb(254, 254, 254);
+    height: 600px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  h1,h2 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+  }
+
+
+
+  .timeline {
+    position: relative;
+    padding: 0;
+    list-style: none;
+  }
+  /* The actual timeline (the vertical ruler) */
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: white;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 5px;
+  }
+  /* Container around content */
+  /* 裡面的東西分成左右 */
+  .timeline-container {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+  }
+  /* The circles on the timeline */
+  .timeline-circle::after {
+    content: '';
+    position: absolute;
+    width: 220px;
+    height: 220px; /* adjust the size of circle */
+    right: -350px; /* 讓 .left的圈移去右邊，增大號碼往左*/
+    background-color: white;
+    /* border: 4px solid #f9c18c; */
+    background-size: cover;
+    top: 30%;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .c1::after {
+    background-image: url("/static/source00.jpg");
+    background-position-x: -50px;
+    background-position-y: -40px;
+    background-size: 170% auto;
+  }
+  .c2::after {
+    background-image: url("/static/source02.jpg");
+  }
+  .c3::after {
+    background-image: url("/static/source03.jpg");
+  }
+  .c4::after {
+    background-image: url("/static/source04.jpg");
+    background-position-x: -10px;
+  }
+  .c5::after {
+    background-image: url("/static/source05.jpg");
+
+  }
+  .left{
+    left: 0;
+  }
+  .right{
+    left: 50%;
+    }
+  .right::after {
+    left: -55%; /*越大往右 */
+  }
+  /* The actual content */
+  .content {
+    padding: 50px 50px;
+    position: relative;
+    border-radius: 6px;
+    font-size: 20px;
+  }

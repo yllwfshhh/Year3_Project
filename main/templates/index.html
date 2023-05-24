@@ -1,0 +1,114 @@
+{% load static %}
+<!-- tutorial-env\Scripts\activate.bat -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %} 
+    <meta charset="UTF-8">
+    <title>Image Prediction</title>
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: column;">
+    <!-------------------- intro-part--------------------->
+    <div class="title" >
+      <div class="title-container">
+        <h1>Peeking into the secrets of Cardiovascular Health</h1>
+        <h2 style="margin: 10px;">A Faster RCNN Approach to CT Ratio Calculation and Cardiovascular Health Analysis.</h2>
+          <div>
+          <button class="index-button" id="scrollBtn" >Tell me more</button>
+          <button  class='index-button' onclick="goToAnotherPage()">Get Started</button>
+          </div>
+      </div>
+    </div>
+
+    <div class="intro" id="intro-part">
+      <h2>About</h2>
+    <div class="intro-container">
+
+      <ul class="timeline">
+          <li class="timeline-container left">
+            <div class="content">
+          <h4>What is Cardiothoracic Ratio (CTR)</h4>
+          <p>CTR stands for Cardiothoracic Ratio, which is a measurement used to assess the size of the heart relative to the size of the chest.
+            The cardiothoracic ratio is measured on a PA chest x-ray, and is the ratio of maximal horizontal cardiac diameter to maximal horizontal thoracic diameter (inner edge of ribs/edge of pleura).</p>
+          <div class="timeline-circle c1"></div>
+          </div>
+        </li>
+        
+          <li class="timeline-container right">
+            <div class="content">
+            <h4>What does CTR tell us ?</h4>
+            <div>The CTR can still be used as an important parameter that can be easily determined in establishing enlargement of the heart.
+            A measurement >0.50 indicates that the heart is enlarged, which can be a sign of various underlying medical conditions such as heart failure, hypertension, or valvular heart disease. 
+            Therefore, CTR can provide important information about the patient's cardiac health and help guide their treatment plan. </div>
+            <div class="timeline-circle c2 right" style="background-image: url('/static/background01.jpg');"></div>
+          </div>
+        </li>
+      
+
+      
+          <li class="timeline-container left">
+            <div class="content">
+            <h4>The usage of CTR for kidney dialysis patients</h4>
+            <div>Patients with chronic heart failure, long-term hypertension, or chronic kidney disease undergoing hemodialysis may often have a CTR greater than 0.5, indicating enlargement of the heart. This not only increases the risk of respiratory distress or hypotension during dialysis, but may also lead to arrhythmia. It also suggests that the patient may have excessive fluid in their body, requiring stricter fluid restriction or an increase in the amount of fluid removed during dialysis.</div>
+            <div class="timeline-circle c3"></div>
+          </div>
+        </li>
+     
+
+     
+          <li class="timeline-container right">
+            <div class="content">
+            <h4>Aortic calcification</h4>
+            <div>Aortic calcification refers to the buildup of calcium in the walls of the aorta, which is the body's largest artery that carries oxygen-rich blood from the heart to the rest of the body. Symptoms of aortic calcification are usually not noticeable until the condition is advanced and can lead to complications such as aneurysms, stroke, heart attack, and peripheral artery disease. Diagnosis of aortic calcification is usually done through imaging tests such as a chest X-ray, CT scan, or MRI. </div>
+            <div class="timeline-circle c4 right"></div>
+          </div>
+        </li>
+  
+
+    
+          <li class="timeline-container left">
+            <div class="content">
+            <h4>This website provide</h4>
+            <p> 1.Calculate patient’s CTR</p>
+            <p> 2.Find the aortic part</p> 
+            <p> 3.Assesthe severity of aortic calcification</p>
+            <p> Application : Helped professionals save a lot of time from calculating CTR and analyze patients’ health conditions based on predictive results.</p>
+            
+            <div class="timeline-circle c5"></div>
+          </div>
+        </li>
+
+      </ul>
+      
+      <div class="intro-left"> 
+        <h4>How we get the CTR ?</h4>
+        <iframe src="https://drive.google.com/file/d/1Qyq9aLQHdDRQ8kvCrqFeViqye0h-rzZR/preview" width="640" height="480" allow="autoplay"></iframe>
+     </div> 
+     
+     <button  class='index-button' onclick="goToAnotherPage()">Get Started</button>
+
+    </div>
+  </div>  
+    </div>
+    </div> 
+
+
+</body>
+</html>
+
+<script>
+  const scrollBtn = document.querySelector('#scrollBtn');
+  const targetDiv = document.querySelector('#intro-part'); //id
+
+  scrollBtn.addEventListener('click', () => {
+    targetDiv.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  function goToAnotherPage() {
+          window.location.href = "{% url 'predict' %}";
+      }
+</script>

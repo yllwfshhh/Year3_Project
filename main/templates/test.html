@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Picture Preview and Submission</title>
+  <script>
+    function previewPicture() {
+      var picturePath = '/static/sample01.jpg';// Replace with the path to your local picture
+      
+      var preview = document.getElementById('picture-preview');
+      preview.src = picturePath;
+    }
+  </script>
+</head>
+<body>
+  <h2>Picture Preview and Submission</h2>
+  <button onclick="previewPicture()">Show Picture Preview</button>
+  <br>
+  <img id="picture-preview" src="#" alt="Picture Preview" style="max-width: 300px; max-height: 300px;">
+  <br>
+  <button type="submit">Submit Picture</button>
+</body>
+</html>

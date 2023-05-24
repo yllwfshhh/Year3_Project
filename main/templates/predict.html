@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title style="color: azure;">Image Prediction</title>
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'predict.css' %}">
+<style>
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      
+    }
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: #ffffff;
+      border: 1px solid black;
+      color: #100f0f;
+      text-align: left;
+      padding: 8px ;
+      border-radius: 6px;
+
+      /* Position the tooltip text */
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+
+      /* Fade in tooltip */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* Tooltip arrow */
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+</style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column;">
+    <!-------------------- predict-part --------------------->
+    <div class="predict-part" id="predictPart">
+      <h1 style="color: azure;">Image Prediction</h1>
+      <div class="upload-part" id="upload-part">
+      <form method="post" style=" margin-left: 30px;" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label for="image">Choose an image:</label>
+          <input type="file" id="image" name="image" onchange="showChosen()">
+          <button class="myButton" type="submit" onclick="showProcessing()">Predict</button>
+      </form>
+      <button class="myButton" type="submit" onclick="showSample01()">Sample01</button>
+      <button class="myButton" type="submit" onclick="showSample02()">Sample02</button>
+      </div>
+
+    
+    <!-------------------- predict-part-left --------------------->
+    <div class="predict-part-container">
+    <div class="predict-part-left" id="predict-part-left">
+      <h2 style="display:none;" id="uploaded-image">Uploaded Image:</h2>
+      <img id="preview" src="#" alt="Image preview" style="display:none; width: 300px; height: 300px">
+    </div>
+
+    <div id="processing" style="display:none;position: absolute;top: 200px;left: 200px; font-size: 20px; ">
+      Processing  <i class="fa fa-spinner fa-pulse"></i> 
+    </div>
+    <!-------------------- predict-part-right --------------------->
+    <div class="predict-part-right" id="predict-part-right">
+      
+        {% if show_image_url %}  
+            <h2 >Result Show:</h2>
+            <img src="{{ uploaded_image_url }}" alt="Image preview" style="width: 300px; height: 300px">
+            <img src="{{ show_image_url }}" alt="Show Image" 
+            style=" width: 300px; height: 300px;" >
+            <div class="right-result">
+            <div class="right-result-p1">
+            {% if predicted_ratio %}
+                <h2>Prediction:</h2>
+                <p id="ratio">
+
+                  <div>
+                  CT Ratio: {{ predicted_ratio }}
+                  <div class="tooltip">
+                  {% if  predicted_ratio > 0.5 %}
+                  <i class="fas fa-exclamation-circle" style="color: #e61919;"></i>
+                  {% else %}
+                  <i class="fas fa-check-circle fa-bounce" style="color: #77e935;"></i>
+                  {% endif %}
+                    <span class="tooltiptext">
+                      if GREATER than 0.5 : Cautious! <br>
+                      if BETWEEN 0.4 and  0.5 : Normak Range <br>
+                      if LESS than 0.4 : Cautious! 
+                    </span>
+                  </div>
+
+                  
+                  </div>
+                </p>
+            {% endif %}
+
+            <p id="rank">
+              <div>
+              Rank: {{ rank }}
+                  <div class="tooltip">
+                  {% if  rank == 1 %}
+                  <i class="fas fa-exclamation-circle" style="color: #e61919;"></i>
+                  {% else %}
+                  <i class="fas fa-check-circle fa-bounce" style="color: #77e935;"></i>
+                  {% endif %}
+                  <span class="tooltiptext">
+                    RANK=0 : Normal <br>
+                    RANK=1 : High risk of cardiovascular disease <br>
+                  </span>
+                </div>
+             </div>
+            </p>
+            
+        <a href="#popup-box" style="color: rgb(255, 255, 255);"> Result Analysis </a>
+          <div id="popup-box" class="modal">
+            <div class="content">
+                <h1 style="color: green;">
+                    Analysis 
+                </h1>
+                <b>
+                    <p>your ct ratio is out of normal range</p>
+                    <p>need to be careful!</p>
+                </b>
+                <a href="#" 
+                  class="box-close">
+                    ×
+                </a>
+            </div>
+        </div>
+
+        <div class="right-result-p2">
+          <canvas id="myCanvas" width="400" height="150"></canvas>
+        </div>
+      {% endif %}
+    </div>
+
+
+    
+    
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+
+
+        </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+
+  function showSample01() {
+    preview.src = '/static/sample01.jpg';
+    showPreview();
+    }
+  function showSample02() {
+    preview.src = '/static/sample02.jpg';
+    showPreview();
+  }
+  function showChosen() {
+    preview.src = URL.createObjectURL(event.target.files[0]);
+    showPreview();
+  }
+
+  function showPreview(){
+    var preview = document.getElementById('preview');
+    preview.style.display = "block";
+    // show text 'Uploaded Image'
+    var text = document.getElementById('uploaded-image');
+    text.style.display = "block";
+    // hide results
+    var div = document.getElementById("predict-part-right");
+    div.innerHTML = "";
+  }
+  function showProcessing() {
+    // show processing
+    var processing = document.getElementById('processing');
+    processing.style.display = "block";
+    // hide upload part
+    var div = document.getElementById("predict-part-left");
+    div.innerHTML = "";
+    }
+
+
+  function popWindow(){
+    window.open('/popup', '_blank', 'width=400,height=400');
+  }
+
+  //draw the scale
+  var canvas = document.getElementById('myCanvas');
+  var ctx = canvas.getContext('2d');
+  var start_x = 50;
+  var end_x = 350;
+  var text_y = 70;
+  var ratio = "{{ predicted_ratio }}";
+
+  ctx.font = "15px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText("0.3", start_x, 100);
+  ctx.fillText("0.4", start_x+1*(end_x-start_x)/3, 100);
+  ctx.fillText("0.5", start_x+2*(end_x-start_x)/3, 100);
+  ctx.fillText("0.6", start_x+3*(end_x-start_x)/3, 100);
+  ctx.beginPath();
+  ctx.moveTo(start_x, 50);
+  ctx.lineTo(end_x, 50);
+
+  ctx.moveTo(start_x, 45);
+  ctx.lineTo(start_x, 55);
+  ctx.moveTo(end_x, 45);
+  ctx.lineTo(end_x, 55);
+
+  // scale
+  ctx.moveTo(start_x + (end_x-start_x)/3, 45);
+  ctx.lineTo(start_x + (end_x-start_x)/3, 55);
+  ctx.moveTo(start_x + 2*(end_x-start_x)/3, 45);
+  ctx.lineTo(start_x + 2*(end_x-start_x)/3, 55);
+  ctx.moveTo(start_x + 3*(end_x-start_x)/3, 45);
+  ctx.lineTo(start_x + 3*(end_x-start_x)/3, 55);
+
+
+  // triangle
+  ctx.moveTo((end_x-start_x)*(ratio-0.3)*10/3+start_x -10, 20);
+  ctx.lineTo((end_x-start_x)*(ratio-0.3)*10/3+start_x +10, 20);
+  ctx.lineTo((end_x-start_x)*(ratio-0.3)*10/3+start_x, 50);
+  ctx.closePath();
+  if ( ratio > 0.5  || ratio < 0.4){
+    ctx.fillStyle = 'red';
+  }
+  else ctx.fillStyle = 'rgb(0, 255, 0)';
+ 
+  ctx.fill();
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'white';
+  ctx.stroke();
+</script>
